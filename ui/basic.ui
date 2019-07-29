@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1235</width>
+    <width>1331</width>
     <height>732</height>
    </rect>
   </property>
@@ -14,13 +14,19 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="minimumSize">
+    <size>
+     <width>800</width>
+     <height>400</height>
+    </size>
+   </property>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>-1</x>
       <y>-1</y>
-      <width>1241</width>
-      <height>701</height>
+      <width>1386</width>
+      <height>720</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="mainLayout">
@@ -38,6 +44,12 @@
      </property>
      <item>
       <widget class="QWidget" name="imageWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>300</height>
+        </size>
+       </property>
        <layout class="QVBoxLayout" name="imageLayout">
         <property name="leftMargin">
          <number>20</number>
@@ -54,7 +66,7 @@
         <item alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Image will appear here</string>
           </property>
          </widget>
         </item>
@@ -63,6 +75,12 @@
      </item>
      <item>
       <widget class="QWidget" name="controlPanelWidget" native="true">
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <layout class="QVBoxLayout" name="controlPanelLayout">
         <property name="leftMargin">
          <number>20</number>
@@ -78,6 +96,18 @@
         </property>
         <item>
          <widget class="QPushButton" name="openFileBtn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Open New Image</string>
           </property>
@@ -85,6 +115,18 @@
         </item>
         <item>
          <widget class="QPushButton" name="choosePointBtn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Choose a Point</string>
           </property>
@@ -92,6 +134,18 @@
         </item>
         <item>
          <widget class="QPushButton" name="findContourBtn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Find Contour</string>
           </property>
@@ -99,6 +153,18 @@
         </item>
         <item>
          <widget class="QWidget" name="contourOptionWidget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <layout class="QFormLayout" name="contourOptionLayout">
            <property name="leftMargin">
             <number>5</number>
@@ -148,7 +214,7 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="colorBtn">
              <property name="text">
-              <string>Color</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -157,6 +223,18 @@
         </item>
         <item>
          <widget class="QPushButton" name="deleteContourBtn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Delete Contour</string>
           </property>
@@ -164,6 +242,18 @@
         </item>
         <item>
          <widget class="QPushButton" name="saveContourBtn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Save Contour</string>
           </property>
@@ -180,7 +270,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1235</width>
+     <width>1331</width>
      <height>21</height>
     </rect>
    </property>

@@ -6,9 +6,6 @@ import os
 
 
 class ContourFinder:
-    '''
-
-    '''
 
     def __init__(self, filepath):
         '''
@@ -25,7 +22,10 @@ class ContourFinder:
         # Load img file
         self.filepath = filepath
         self.image = io.imread(self.filepath, as_grey=True)
+        self.color = "#FFFFFF"
 
+    def setColor(self, colorValue):
+        self.color = colorValue
 
     def choose(self):
         pass
@@ -44,16 +44,16 @@ class ContourFinder:
         # ax.imshow(denoised, cmap=plt.cm.gray)
 
         for n, contour in enumerate(contours):
-            ax.plot(contour[:, 1], contour[:, 0], linewidth=2)
+            ax.plot(contour[:, 1], contour[:, 0], linewidth=2, color=self.color)
 
 
         ax.axis('image')
         ax.set_xticks([])
         ax.set_yticks([])
         plt.savefig('images/result.png', bbox_inches='tight', pad_inches=0, dpi=100)
-        plt.show()
+        # plt.show()
 
-
+        return 'images/result.png'
 
 if __name__ == "__main__":
     filepath = "./images/test.png"
