@@ -21,7 +21,7 @@ class ContourFinder:
 
         # Load img file
         self.filepath = filepath
-        self.image = io.imread(self.filepath, as_grey=True)
+        self.image = io.imread(self.filepath, as_gray=True)
         self.color = "#FFFFFF"
 
     def setColor(self, colorValue):
@@ -51,9 +51,9 @@ class ContourFinder:
         ax.set_xticks([])
         ax.set_yticks([])
         plt.savefig('images/result.png', bbox_inches='tight', pad_inches=0, dpi=100)
-        # plt.show()
+        plt.show()
 
-        return 'images/result.png'
+        return contours
 
 if __name__ == "__main__":
     filepath = "./images/test.png"

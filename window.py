@@ -82,17 +82,50 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             msg = QtWidgets.QMessageBox.information(self, "Information", "Choose any point you want")
 
 
+    def paintEvent(self, event):
+        try:
+            qp = QtGui.QPainter()
+            qp.begin(self)
+            self.drawLines(qp, self.contours)
+            qp.end()
+        except Exception as e:
+            # print(e)
+            pass
+
+    def drawLines(self,qp, contours):
+
+        # color = QtGui.QColor(0, 0, 0)
+        # color.setNamedColor(self.color)
+
+        pen = QtGui.QPen(QtCore.Qt.red, 2, QtCore.Qt.SolidLine)
+
+        qp.setPen(pen)
+        for n, contour in enumerate(contours):
+            for i in range(len(contour[:, 1])-1):
+                qp.drawLine(contour[i, 1], contour[i, 0],contour[i+1, 1], contour[i+1, 0])
+
+
+
+
     @QtCore.pyqtSlot()
     def on_findContourBtn_clicked(self):
         try:
             self.finder.setColor(self.color)
-            path = self.finder.find(0.8)
-            print(path)
-            pixmap = QtGui.QPixmap(path)
-            self.label.setPixmap(pixmap)
-            self.label.resize(self.imageWidget.sizeHint())
-        except:
-            print("find error")
+            self.contours = self.finder.find(0.8)
+            self.update()
+
+
+
+            # for n, contour in enumerate(contours):
+            #     for i in range(len(contour[:, 1])-1):
+            #
+            #         qp.drawLine(contour[i, 1], contour[i, 0],contour[i+1, 1], contour[i+1, 0])
+            print("그리기 끝")
+
+        except Exception as e:
+            print(e)
+
+
 
     @QtCore.pyqtSlot()
     def on_deleteContourBtn_clicked(self):
