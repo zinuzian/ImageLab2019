@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import uic
+from Drawable import DrawableQLabel
 from Algo import ContourFinder
 
 form_class = uic.loadUiType("ui/basic.ui")[0]
@@ -26,9 +27,12 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
         self.color = "#ff0000"
         self.finder = None
         self.contours = None
+        # self.imageLabel = None
+        # self.imageWidget = None
+
+
 
         self.resized.connect(self.resizeElem)
-        self.imageLabel.mousePressEvent = self.getPos
         self.colorBtn.setStyleSheet("background-color:" + self.color)
         self.originFilePath = ""
         self.saveFilePath = ""
@@ -64,6 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             self.qimg = self.finder.getQImg()
             self.pixmap = QtGui.QPixmap(QtGui.QPixmap.fromImage(self.qimg))
             self.imageLabel.setPixmap(self.pixmap)
+            self.imageLabel.mousePressEvent = self.getPos
 
             # self.imageLabel.resize(self.imageWidget.sizeHint())
             self.statusBar.showMessage(self.originFilePath)
@@ -101,12 +106,19 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             self.finder.setColor(self.color)
             self.value = float(self.valueLine.text())
             self.contours = self.finder.find(self.value)
-            # self.contourLabel = Label(self.imageLabel, self.contours)
-            # self.imageLabel = self.contourLabel
 
-            self.imageLabel2 = Label(self.imageLabel,  self.contours)
-            self.imageLabel2.setObjectName("imageLabel2")
-            self.imageLayout.addWidget(self.imageLabel2, 0, QtCore.Qt.AlignHCenter)
+            # newLabel = DrawableQLabel(self.imageWidget)
+            # newLabel.setContours(self.contours)
+            # newLabel.setPenColor(self.color)
+            # self.imageLabel = newLabel
+
+            # self.imageLabel.setContours(self.contours)
+            # self.imageLabel.setPenColor
+
+
+            self.imageLabel.setContours(self.contours)
+            self.imageLabel.setPenColor(self.color)
+
             self.update()
             print("그리기 끝")
 
@@ -159,30 +171,6 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             print(color.name())
             self.color = color.name()
             self.colorBtn.setStyleSheet("background-color:" + self.color)
-
-
-
-class Label(QtWidgets.QLabel):
-    def __init__(self, parent=None, contours=None):
-        super(Label, self).__init__(parent=parent)
-        if contours is not None:
-            self.contours = contours
-
-    def paintEvent(self, e):
-        try:
-            super().paintEvent(e)
-            if self.contours is not None:
-                qp = QtGui.QPainter(self)
-                qp.begin(self)
-                pen = QtGui.QPen(QtCore.Qt.red, 2, QtCore.Qt.SolidLine)
-                qp.setPen(pen)
-                for n, contour in enumerate(self.contours):
-                    for i in range(len(contour[:, 1]) - 1):
-                        qp.drawLine(contour[i, 1], contour[i, 0], contour[i + 1, 1], contour[i + 1, 0])
-                qp.end()
-        except Exception as e:
-            print(e)
-
 
 
 if __name__ == "__main__":

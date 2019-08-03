@@ -64,7 +64,7 @@
          <number>20</number>
         </property>
         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-         <widget class="QLabel" name="imageLabel">
+         <widget class="DrawableQLabel" name="imageLabel">
           <property name="text">
            <string>Image will appear here</string>
           </property>
@@ -333,6 +333,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DrawableQLabel</class>
+   <extends>QLabel</extends>
+   <header>Drawable</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
