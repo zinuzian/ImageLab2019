@@ -27,9 +27,9 @@ class Ui_MainWindow(object):
         self.imageLayout = QtWidgets.QVBoxLayout(self.imageWidget)
         self.imageLayout.setContentsMargins(20, 20, 20, 20)
         self.imageLayout.setObjectName("imageLayout")
-        self.label = QtWidgets.QLabel(self.imageWidget)
-        self.label.setObjectName("label")
-        self.imageLayout.addWidget(self.label, 0, QtCore.Qt.AlignHCenter)
+        self.imageLabel = QtWidgets.QLabel(self.imageWidget)
+        self.imageLabel.setObjectName("imageLabel")
+        self.imageLayout.addWidget(self.imageLabel, 0, QtCore.Qt.AlignHCenter)
         self.mainLayout.addWidget(self.imageWidget)
         self.controlPanelWidget = QtWidgets.QWidget(self.horizontalLayoutWidget)
         self.controlPanelWidget.setMaximumSize(QtCore.QSize(300, 16777215))
@@ -129,7 +129,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "Image will appear here"))
+        self.imageLabel.setText(_translate("MainWindow", "Image will appear here"))
         self.openFileBtn.setText(_translate("MainWindow", "Open New Image"))
         self.choosePointBtn.setText(_translate("MainWindow", "Choose a Point"))
         self.findContourBtn.setText(_translate("MainWindow", "Find Contour"))

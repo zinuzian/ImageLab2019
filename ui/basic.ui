@@ -63,8 +63,8 @@
         <property name="bottomMargin">
          <number>20</number>
         </property>
-        <item alignment="Qt::AlignHCenter">
-         <widget class="QLabel" name="label">
+        <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+         <widget class="QLabel" name="imageLabel">
           <property name="text">
            <string>Image will appear here</string>
           </property>

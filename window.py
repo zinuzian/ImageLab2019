@@ -12,11 +12,9 @@ from Algo import ContourFinder
 
 form_class = uic.loadUiType("ui/basic.ui")[0]
 
-
 mainWindowWidth = 1280
 mainWindowHeight = 720
 toolbarHeight = 21
-
 
 
 class MainWindow(QtWidgets.QMainWindow, form_class):
@@ -28,11 +26,10 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
         self.color = "#ff0000"
         self.finder = None
         self.contours = None
-        self.image = QtGui.QImage()
 
         self.resized.connect(self.resizeElem)
-
-        self.colorBtn.setStyleSheet("background-color:"+self.color)
+        self.imageLabel.mousePressEvent = self.getPos
+        self.colorBtn.setStyleSheet("background-color:" + self.color)
         self.originFilePath = ""
         self.saveFilePath = ""
         self.value = 0.5
@@ -42,10 +39,17 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
     def resizeElem(self):
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 0, self.width(), self.height()))
 
-
     def resizeEvent(self, event):
         self.resized.emit()
         return super(MainWindow, self).resizeEvent(event)
+
+    def getPos(self, event):
+        x = event.pos().x()
+        y = event.pos().y()
+
+        self.finder.choose(x, y)
+        self.valueLine.setText(str(self.finder.value))
+        msg = QtWidgets.QMessageBox.information(self, "Information", "Complete !")
 
 
 
@@ -55,24 +59,22 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
         try:
             fname = QtWidgets.QFileDialog.getOpenFileName(self)
             self.originFilePath = fname[0]
-            self.img = QtGui.QImage(self.originFilePath)
-            pixmap = QtGui.QPixmap(QtGui.QPixmap.fromImage(self.img))
-            self.label.setPixmap(pixmap)
-
-            self.label.resize(self.imageWidget.sizeHint())
-            self.statusBar.showMessage(self.originFilePath)
 
             self.finder = ContourFinder(self.originFilePath)
+            self.qimg = self.finder.getQImg()
+            self.pixmap = QtGui.QPixmap(QtGui.QPixmap.fromImage(self.qimg))
+            self.imageLabel.setPixmap(self.pixmap)
+
+            # self.imageLabel.resize(self.imageWidget.sizeHint())
+            self.statusBar.showMessage(self.originFilePath)
 
             print("open complete")
         except Exception as e:
             print("open error")
             print(e)
+            self.finder = None
 
-    def getPos(self, event):
-        x = event.pos().x()
-        y = event.pos().y()
-        val = self.label
+
 
     @QtCore.pyqtSlot()
     def on_choosePointBtn_clicked(self):
@@ -80,10 +82,10 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
         try:
 
             if self.originFilePath is None or self.originFilePath == "":
-                msg = QtWidgets.QMessageBox.information(self, "Warning", "Select an image first !!")
+                msg = QtWidgets.QMessageBox.information(self, "Warning", "Load image first !!")
             else:
-
                 msg = QtWidgets.QMessageBox.information(self, "Information", "Choose any point you want")
+
 
 
 
@@ -93,28 +95,18 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
 
 
 
-
-    def paintEvent(self, event):
-        try:
-            qp = QtGui.QPainter()
-            qp.begin(self.label)
-            self.label.drawLines(qp, self.contours)
-            qp.end()
-        except Exception as e:
-            # print(e)
-            pass
-
-
-
-
-
-
     @QtCore.pyqtSlot()
     def on_findContourBtn_clicked(self):
         try:
             self.finder.setColor(self.color)
             self.value = float(self.valueLine.text())
             self.contours = self.finder.find(self.value)
+            # self.contourLabel = Label(self.imageLabel, self.contours)
+            # self.imageLabel = self.contourLabel
+
+            self.imageLabel2 = Label(self.imageLabel,  self.contours)
+            self.imageLabel2.setObjectName("imageLabel2")
+            self.imageLayout.addWidget(self.imageLabel2, 0, QtCore.Qt.AlignHCenter)
             self.update()
             print("그리기 끝")
 
@@ -122,15 +114,22 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             print("find error")
             print(e)
 
-    def drawLines(self,qp, contours):
+
+    # def paintEvent(self, event):
+    #     try:
+    #         if self.contours is not None:
+    #             qp = QtGui.QPainter(self.pixmap)
+    #             qp.begin(self.pixmap)
+    #             self.drawLines(qp, self.contours)
+    #             qp.end()
+    #
+    #
+    #     except Exception as e:
+    #         print(e)
 
 
-        pen = QtGui.QPen(QtCore.Qt.red, 2, QtCore.Qt.SolidLine)
 
-        qp.setPen(pen)
-        for n, contour in enumerate(contours):
-            for i in range(len(contour[:, 1])-1):
-                qp.drawLine(contour[i, 1], contour[i, 0],contour[i+1, 1], contour[i+1, 0])
+
 
     @QtCore.pyqtSlot()
     def on_deleteContourBtn_clicked(self):
@@ -153,7 +152,6 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             print("save error")
             print(e)
 
-
     @QtCore.pyqtSlot()
     def on_colorBtn_clicked(self):
         color = QtWidgets.QColorDialog.getColor()
@@ -164,10 +162,33 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
 
 
 
+class Label(QtWidgets.QLabel):
+    def __init__(self, parent=None, contours=None):
+        super(Label, self).__init__(parent=parent)
+        if contours is not None:
+            self.contours = contours
+
+    def paintEvent(self, e):
+        try:
+            super().paintEvent(e)
+            if self.contours is not None:
+                qp = QtGui.QPainter(self)
+                qp.begin(self)
+                pen = QtGui.QPen(QtCore.Qt.red, 2, QtCore.Qt.SolidLine)
+                qp.setPen(pen)
+                for n, contour in enumerate(self.contours):
+                    for i in range(len(contour[:, 1]) - 1):
+                        qp.drawLine(contour[i, 1], contour[i, 0], contour[i + 1, 1], contour[i + 1, 0])
+                qp.end()
+        except Exception as e:
+            print(e)
+
+
+
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
-
