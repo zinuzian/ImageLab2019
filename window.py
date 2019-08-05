@@ -8,7 +8,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import uic
-from Drawable import DrawableQLabel
 from Algo import ContourFinder
 
 form_class = uic.loadUiType("ui/basic.ui")[0]
@@ -106,16 +105,6 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             self.finder.setColor(self.color)
             self.value = float(self.valueLine.text())
             self.contours = self.finder.find(self.value)
-
-            # newLabel = DrawableQLabel(self.imageWidget)
-            # newLabel.setContours(self.contours)
-            # newLabel.setPenColor(self.color)
-            # self.imageLabel = newLabel
-
-            # self.imageLabel.setContours(self.contours)
-            # self.imageLabel.setPenColor
-
-
             self.imageLabel.setContours(self.contours)
             self.imageLabel.setPenColor(self.color)
 
@@ -125,21 +114,6 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
         except Exception as e:
             print("find error")
             print(e)
-
-
-    # def paintEvent(self, event):
-    #     try:
-    #         if self.contours is not None:
-    #             qp = QtGui.QPainter(self.pixmap)
-    #             qp.begin(self.pixmap)
-    #             self.drawLines(qp, self.contours)
-    #             qp.end()
-    #
-    #
-    #     except Exception as e:
-    #         print(e)
-
-
 
 
 
@@ -155,13 +129,20 @@ class MainWindow(QtWidgets.QMainWindow, form_class):
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,
                                                                 "Save File",
                                                                 "c:\\",
-                                                                "Image files (*.jpg *.gif);;Text Files (*.txt)",
+                                                                "Image files (*.jpg *.gif *.png);;Text Files (*.txt)",
                                                                 options=options)
             file = open(fileName, 'wb')
             file.close()
 
+            success = self.finder.save(fileName, self.contours, self.color)
+            if success:
+                msg = QtWidgets.QMessageBox.information(self, "Information", "Save Complete")
+
+
+
         except Exception as e:
             print("save error")
+            msg = QtWidgets.QMessageBox.information(self, "Warning", e)
             print(e)
 
     @QtCore.pyqtSlot()
